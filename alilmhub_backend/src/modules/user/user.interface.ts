@@ -14,6 +14,7 @@ export type TBaseUser = {
   profileImage?: string;
   isVerified: boolean;
   isDeleted?: boolean;
+  reputation: number;
   authId: Types.ObjectId;
 };
 

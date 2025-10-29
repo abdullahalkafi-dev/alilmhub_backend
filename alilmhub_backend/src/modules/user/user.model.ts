@@ -35,6 +35,7 @@ const userSchema = new Schema<TBaseUser>(
       enum: Object.values(UserRole),
       required: true,
     },
+    reputation: { type: Number, default: 0 },
     isDeleted: { type: Boolean, default: false },
   },
   {
@@ -49,7 +50,7 @@ userSchema.index({ authId: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ isVerified: 1 });
 userSchema.index({ createdAt: -1 });
-
+userSchema.index({ reputation: 1 });
 // keep Auth email in sync
 userSchema.pre("save", async function (next) {
   if (this.isModified("email")) {

@@ -14,8 +14,27 @@ const server = socketServer();
 async function main() {
   try {
     //TODO:  seedSuperAdmin();
-    mongoose.connect(config.database_url as string);
+    
+    // MongoDB connection with better error handling
+    await mongoose.connect(config.database_url as string, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+    
     logger.info(colors.green("🚀 Database connected successfully"));
+
+    // Handle MongoDB connection events
+    mongoose.connection.on('disconnected', () => {
+      logger.warn(colors.yellow('⚠️  MongoDB disconnected'));
+    });
+
+    mongoose.connection.on('reconnected', () => {
+      logger.info(colors.green('🔄 MongoDB reconnected'));
+    });
+
+    mongoose.connection.on('error', (err) => {
+      logger.error(colors.red('❌ MongoDB connection error:'), err);
+    });
 
     const port =
       typeof config.port === "number" ? config.port : Number(config.port);
@@ -30,7 +49,8 @@ async function main() {
       );
     });
   } catch (error) {
-    logger.error(colors.red("🤢 Failed to connect Database"));
+    logger.error(colors.red("🤢 Failed to connect Database"), error);
+    process.exit(1);
   }
 }
 
