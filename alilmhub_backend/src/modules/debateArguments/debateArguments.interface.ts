@@ -5,9 +5,8 @@ export type TDebateArguments = {
   userId: Types.ObjectId;
   argumentText: string;
   references: Types.ObjectId[];
-  upvotes?: number;
-  downvotes?: number;
-
+  upVotes?: number;
+  downVotes?: number;
   createdAt: Date;
   updatedAt: Date;
 };
