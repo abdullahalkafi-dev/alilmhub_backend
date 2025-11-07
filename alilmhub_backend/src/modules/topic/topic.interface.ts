@@ -5,6 +5,15 @@ export type TBreadcrumb = {
   title: string;
 };
 
+export type TTopicTreeNode = {
+  slug: string;
+  title: string;
+  count: number;
+  isFeatured?: boolean;
+  hasSubTopics: boolean;
+  children: TTopicTreeNode[];
+};
+
 export type TTopic = {
   slug: string;
   title: string;
@@ -14,6 +23,7 @@ export type TTopic = {
   viewsCount: number;
   createdBy: Types.ObjectId;
   references: Types.ObjectId[];
+  isFeatured?: boolean;
   isDeleted?: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -19,6 +19,7 @@ const createTopic = z.object({
     references: z
       .array(z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid reference ID format"))
       .optional(),
+    isFeatured: z.boolean().optional(),
   }),
 });
 
@@ -42,6 +43,7 @@ const updateTopic = z.object({
     references: z
       .array(z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid reference ID format"))
       .optional(),
+    isFeatured: z.boolean().optional(),
   }),
 });
 

@@ -41,6 +41,10 @@ const topicSchema = new Schema<ITopicDocument>(
         ref: "Reference",
       },
     ],
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
     isDeleted: {
       type: Boolean,
       default: false,

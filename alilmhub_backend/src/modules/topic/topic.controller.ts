@@ -97,6 +97,16 @@ const getSubTopics = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getKnowledgeTree = catchAsync(async (req: Request, res: Response) => {
+  const tree = await TopicServices.getKnowledgeTree();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Knowledge tree retrieved successfully",
+    data: tree,
+  });
+});
+
 export const TopicController = {
   createTopic,
   getAllTopics,
@@ -106,4 +116,5 @@ export const TopicController = {
   addReferences,
   removeReferences,
   getSubTopics,
+  getKnowledgeTree,
 };

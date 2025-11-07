@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export type TDebates = {
-    slug: string;
+  slug: string;
   title: string;
   titleDescription?: string;
   topicId?: Types.ObjectId;
@@ -12,10 +12,10 @@ export type TDebates = {
   references: Types.ObjectId[];
   status: "open" | "closed" | "archived";
   stance: "supporting" | "opposing";
-    viewsCount?: number;
+  viewsCount?: number;
   supportingVotesCount: number;
   opposingVotesCount: number;
-    isDeleted?: boolean;
+  isDeleted?: boolean;
 
   createdAt: Date;
   updatedAt: Date;

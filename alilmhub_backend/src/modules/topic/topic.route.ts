@@ -6,6 +6,8 @@ import validateRequest from "../../shared/middlewares/validateRequest";
 
 const router = express.Router();
 
+router.get("/knowledge-tree", TopicController.getKnowledgeTree);
+
 router.post(
   "/",
   auth(),

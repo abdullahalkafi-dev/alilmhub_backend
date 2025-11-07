@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Types } from "mongoose";
 import AppError from "../../errors/AppError";
 import { Topic } from "./topic.model";
-import { TTopic } from "./topic.interface";
+import { TTopic, TTopicTreeNode } from "./topic.interface";
 import { QueryBuilder } from "../../shared/builder/QueryBuilder";
 
 const createTopic = async (payload: Partial<TTopic>, userId: string) => {
@@ -148,6 +148,44 @@ const getSubTopics = async (parentSlug: string) => {
   return subTopics;
 };
 
+const getKnowledgeTree = async () => {
+  const allTopics = await Topic.find({ isDeleted: { $ne: true } }).lean();
+
+  const topicMap = new Map<string, TTopicTreeNode>();
+  const rootTopics: TTopicTreeNode[] = [];
+
+  allTopics.forEach((topic) => {
+    const childrenCount = allTopics.filter(
+      (t) => t.parentTopic?.toString() === topic._id.toString()
+    ).length;
+
+    topicMap.set(topic._id.toString(), {
+      slug: topic.slug,
+      title: topic.title,
+      count: topic.references?.length || 0,
+      isFeatured: topic.isFeatured || false,
+      hasSubTopics: childrenCount > 0,
+      children: [],
+    });
+  });
+
+  allTopics.forEach((topic) => {
+    const node = topicMap.get(topic._id.toString());
+    if (!node) return;
+
+    if (topic.parentTopic) {
+      const parentNode = topicMap.get(topic.parentTopic.toString());
+      if (parentNode) {
+        parentNode.children.push(node);
+      }
+    } else {
+      rootTopics.push(node);
+    }
+  });
+
+  return rootTopics;
+};
+
 export const TopicServices = {
   createTopic,
   getAllTopics,
@@ -157,4 +195,5 @@ export const TopicServices = {
   addReferences,
   removeReferences,
   getSubTopics,
+  getKnowledgeTree,
 };
